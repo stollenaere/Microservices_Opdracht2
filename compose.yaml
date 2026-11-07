@@ -1,0 +1,41 @@
+name: it-support-stack
+
+services:
+  stijn
+  ticket:
+    image: bfren/freescout:php8.3.31
+    volumes:
+      - ticket_data:/data #Installed modules and persistent storage (logs, attachments, etc)
+    ports: 
+      - 80:80
+    networks:
+      - support
+    environment:
+      FREESCOUT_URL: http://ticket.sto-clo-howest.be
+      FREESCOUT_ADMIN_FIRSTNAME: ${FREESCOUT_ADMIN_FIRSTNAME}
+      FREESCOUT_ADMIN_LASTNAME: ${FREESCOUT_ADMIN_LASTNAME}
+      FREESCOUT_ADMIN_EMAIL: ${FREESCOUT_ADMIN_EMAIL}
+      FREESCOUT_ADMIN_PASS: ${FREESCOUT_ADMIN_PASS}
+      FREESCOUT_DB_CONN: mysql
+      FREESCOUT_DB_PORT: 3306
+      FREESCOUT_DB_NAME: freescout
+      FREESCOUT_DB_USER: freescout
+      FREESCOUT_DB_PASS: ${FREESCOUT_DB_PASS}
+      FREESCOUT_DB_HOST: free_db
+      FREESCOUT_HTTPS: false
+
+networks:
+  support:
+    driver: bridge
+    enable_ipv4: true
+    enable_ipv6: false
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          ip_range: 172.20.10.0/24
+          gateway: 172.20.10.1
+
+volumes:
+  ticket_data:
+      
