@@ -11,7 +11,7 @@ services:
     networks:
       - support
     environment:
-      APP_URL: http://ticket.sto-clo-howest.be
+      APP_URL: http://ticket.sto-clo-howest.be #${FREESCOUT_APP_URL}
       ADMIN_FIRSTNAME: ${FREESCOUT_ADMIN_FIRSTNAME}
       ADMIN_LASTNAME: ${FREESCOUT_ADMIN_LASTNAME}
       ADMIN_EMAIL: ${FREESCOUT_ADMIN_EMAIL}
@@ -23,6 +23,8 @@ services:
       DB_PASS: ${FREESCOUT_DB_PASS}
       DB_HOST: free_db
       FREESCOUT_HTTPS: "false"
+    depends_on:
+      - free_db
 
   free_db:
     image: mariadb:13.0.2
@@ -35,6 +37,25 @@ services:
       - support
     volumes:
       - free_db_files:/var/lib/mysql
+
+  wiki:
+    image: solidnerd/bookstack:26.9
+    ports:
+      - 8080:8080
+    networks:
+      - support
+    environment:
+      DB_HOSTS: book_db
+      DB_DATABASE: bookstack
+      DB_USERNAME: bookstack
+      DB_PASSWORD: &{WIKI_DB_PASSWORD}
+      APP_URL: ${WIKI_APP_URL}
+      APP_KEY: ${WIKI_APP_KEY}
+    volumes:
+      - wiki_public:/var/www/bookstack/public/uploads
+      - wiki_storage:/var/www/bookstack/storage/uploads
+    depends_on:
+      - book_db
   
 networks:
   support:
@@ -51,4 +72,6 @@ networks:
 volumes:
   ticket_data:
   free_db_files:
+  wiki_public:
+  wiki_storage:
       
