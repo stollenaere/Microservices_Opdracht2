@@ -3,7 +3,7 @@ name: it-support-stack
 services:
   
   ticket:
-    image: bfren/freescout:php8.3.31
+    image: nfrastack/freescout:2.2.24-alpine
     volumes:
       - ticket_data:/data #Installed modules and persistent storage (logs, attachments, etc)
     ports: 
@@ -11,17 +11,17 @@ services:
     networks:
       - support
     environment:
-      FREESCOUT_URL: http://ticket.sto-clo-howest.be
-      FREESCOUT_ADMIN_FIRSTNAME: ${FREESCOUT_ADMIN_FIRSTNAME}
-      FREESCOUT_ADMIN_LASTNAME: ${FREESCOUT_ADMIN_LASTNAME}
-      FREESCOUT_ADMIN_EMAIL: ${FREESCOUT_ADMIN_EMAIL}
-      FREESCOUT_ADMIN_PASS: ${FREESCOUT_ADMIN_PASS}
-      FREESCOUT_DB_CONN: mysql
-      FREESCOUT_DB_PORT: 3306
-      FREESCOUT_DB_NAME: freescout
-      FREESCOUT_DB_USER: freescout
-      FREESCOUT_DB_PASS: ${FREESCOUT_DB_PASS}
-      FREESCOUT_DB_HOST: free_db
+      APP_URL: http://ticket.sto-clo-howest.be
+      ADMIN_FIRSTNAME: ${FREESCOUT_ADMIN_FIRSTNAME}
+      ADMIN_LASTNAME: ${FREESCOUT_ADMIN_LASTNAME}
+      ADMIN_EMAIL: ${FREESCOUT_ADMIN_EMAIL}
+      ADMIN_PASS: ${FREESCOUT_ADMIN_PASS}
+      DB_TYPE: mariadb
+      DB_PORT: 3306
+      DB_NAME: freescout
+      DB_USER: freescout
+      DB_PASS: ${FREESCOUT_DB_PASS}
+      DB_HOST: free_db
       FREESCOUT_HTTPS: "false"
 
   free_db:
