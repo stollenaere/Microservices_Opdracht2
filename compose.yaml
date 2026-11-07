@@ -1,7 +1,7 @@
 name: it-support-stack
 
 services:
-  stijn
+  
   ticket:
     image: bfren/freescout:php8.3.31
     volumes:
@@ -22,8 +22,20 @@ services:
       FREESCOUT_DB_USER: freescout
       FREESCOUT_DB_PASS: ${FREESCOUT_DB_PASS}
       FREESCOUT_DB_HOST: free_db
-      FREESCOUT_HTTPS: false
+      FREESCOUT_HTTPS: "false"
 
+  free_db:
+    image: mariadb:13.0.2
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWD}
+      MARIADB_USER: freescout
+      MARIADB_PASSWORD: ${FREESCOUT_DB_PASS}
+      MARIADB_DATABASE: freescout
+    networks:
+      - support
+    volumes:
+      - free_db_files:/var/lib/mysql
+  
 networks:
   support:
     driver: bridge
@@ -38,4 +50,5 @@ networks:
 
 volumes:
   ticket_data:
+  free_db_files:
       
