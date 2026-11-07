@@ -45,10 +45,10 @@ services:
     networks:
       - support
     environment:
-      DB_HOSTS: book_db
+      DB_HOST: book_db:3306
       DB_DATABASE: bookstack
       DB_USERNAME: bookstack
-      DB_PASSWORD: &{WIKI_DB_PASSWORD}
+      DB_PASSWORD: ${WIKI_DB_PASSWORD}
       APP_URL: ${WIKI_APP_URL}
       APP_KEY: ${WIKI_APP_KEY}
     volumes:
@@ -56,6 +56,18 @@ services:
       - wiki_storage:/var/www/bookstack/storage/uploads
     depends_on:
       - book_db
+
+  book_db:
+    image: mariadb:13.0.2
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWD}
+      MARIADB_USER: bookstack
+      MARIADB_PASSWORD: ${WIKI_DB_PASSWORD}
+      MARIADB_DATABASE: bookstack
+    networks:
+      - support
+    volumes:
+      - book_db_files:/var/lib/mysql
   
 networks:
   support:
@@ -74,4 +86,5 @@ volumes:
   free_db_files:
   wiki_public:
   wiki_storage:
+  book_db_files:
       
