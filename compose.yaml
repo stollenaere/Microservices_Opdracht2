@@ -82,8 +82,11 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
       - 8081:3001
+    networks:
+      - support
     restart: always
-  
+
+
 networks:
   support:
     driver: bridge
